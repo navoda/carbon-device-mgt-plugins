@@ -17,5 +17,79 @@
  */
 package org.wso2.carbon.device.mgt.iot.input.adapter.coap;
 
-public class COAPEventAdapter {
+
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapHandler;
+import org.eclipse.californium.core.CoapResponse;
+import org.wso2.carbon.device.mgt.iot.input.adapter.coap.util.COAPEventAdapterConstants;
+import org.wso2.carbon.event.input.adapter.core.InputEventAdapter;
+import org.wso2.carbon.event.input.adapter.core.InputEventAdapterConfiguration;
+import org.wso2.carbon.event.input.adapter.core.InputEventAdapterListener;
+import org.wso2.carbon.event.input.adapter.core.exception.ConnectionUnavailableException;
+import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterException;
+import org.wso2.carbon.event.input.adapter.core.exception.InputEventAdapterRuntimeException;
+import org.wso2.carbon.event.input.adapter.core.exception.TestConnectionNotSupportedException;
+
+import java.util.Map;
+
+public class COAPEventAdapter implements InputEventAdapter {
+
+    private final InputEventAdapterConfiguration eventAdapterConfiguration;
+    private final Map<String, String> globalProperties;
+
+    public COAPEventAdapter(InputEventAdapterConfiguration eventAdapterConfiguration,
+                            Map<String, String> globalProperties) {
+        this.eventAdapterConfiguration = eventAdapterConfiguration;
+        this.globalProperties = globalProperties;
+    }
+
+    @Override
+    public void init(InputEventAdapterListener inputEventAdapterListener) throws InputEventAdapterException {
+
+    }
+
+    @Override
+    public void testConnect() throws TestConnectionNotSupportedException, InputEventAdapterRuntimeException, ConnectionUnavailableException {
+
+
+    }
+
+    @Override
+    public void connect() {
+
+        String endpoint = eventAdapterConfiguration.getName();
+        String payload = "";
+        CoapClient coapClient = new CoapClient(COAPEventAdapterConstants.COAP, "localhost", COAPEventAdapterConstants.DEFAULT_COAP_PORT, COAPEventAdapterConstants.RESOURCE_DIRECTORY+"?ep="+endpoint); //schema, host,port,path
+//        coapClient.post(new CoapHandler() {
+//            @Override
+//            public void onLoad(CoapResponse response) {
+//
+//            }
+//
+//            @Override
+//            public void onError() {
+//
+//            }
+//        },payload, C);C
+    }
+
+    @Override
+    public void disconnect() {
+
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+    @Override
+    public boolean isEventDuplicatedInCluster() {
+        return false;
+    }
+
+    @Override
+    public boolean isPolling() {
+        return false;
+    }
 }

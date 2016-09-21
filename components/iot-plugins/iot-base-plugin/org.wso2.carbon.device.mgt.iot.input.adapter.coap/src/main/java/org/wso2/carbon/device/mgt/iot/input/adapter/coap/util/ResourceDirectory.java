@@ -17,5 +17,38 @@
  */
 package org.wso2.carbon.device.mgt.iot.input.adapter.coap.util;
 
-public class ResourceDirectory {
+import org.eclipse.californium.core.CoapServer;
+import org.eclipse.californium.core.network.config.NetworkConfig;
+import org.eclipse.californium.core.server.resources.Resource;
+import org.eclipse.californium.tools.resources.RDLookUpTopResource;
+import org.eclipse.californium.tools.resources.RDResource;
+
+public class ResourceDirectory extends CoapServer {
+
+    private RDResource rdResource;
+
+    public ResourceDirectory() {
+        super();
+        init();
+    }
+
+    public ResourceDirectory(int... ports) {
+        super(ports);
+        init();
+    }
+
+    public ResourceDirectory(NetworkConfig config, int... ports) {
+        super(config, ports);
+        init();
+    }
+
+    public void init() {
+        //directory adds ResourceDiirectory resource and the ResourseDirectoryLookup resource
+        rdResource = new RDResource();
+        this.add(rdResource);
+        this.add(new RDLookUpTopResource(rdResource));
+
+    }
+
+
 }
