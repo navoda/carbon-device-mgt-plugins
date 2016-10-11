@@ -15,11 +15,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.carbon.device.mgt.iot.input.adapter.coap.util;
+package org.wso2.carbon.device.mgt.iot.input.adapter.coap.internal;
 
 import org.eclipse.californium.core.CoapServer;
 import org.eclipse.californium.core.network.config.NetworkConfig;
-import org.eclipse.californium.core.server.resources.Resource;
 import org.eclipse.californium.tools.resources.RDLookUpTopResource;
 import org.eclipse.californium.tools.resources.RDResource;
 
