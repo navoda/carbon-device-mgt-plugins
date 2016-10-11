@@ -14,5 +14,23 @@
  */
 package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory;
 
-public class RDLookUpTopResource {
+import org.eclipse.californium.core.CoapResource;
+
+
+public class RDLookUpTopResource extends CoapResource {
+
+//	private RDResource rdResource = null;
+
+    public RDLookUpTopResource(RDResource rd){
+        this("rd-lookup", rd);
+    }
+
+    public RDLookUpTopResource(String resourceIdentifier, RDResource rd) {
+        super(resourceIdentifier);
+//		this.rdResource = rd;
+        getAttributes().addResourceType("core.rd-lookup");
+        add(new RDLookUpDomainResource("d", rd));
+        add(new RDLookUpEPResource("ep", rd));
+        add(new RDLookUpResResource("res", rd));
+    }
 }

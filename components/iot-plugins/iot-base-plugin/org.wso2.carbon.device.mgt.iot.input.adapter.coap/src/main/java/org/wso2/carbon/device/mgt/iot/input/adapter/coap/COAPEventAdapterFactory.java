@@ -19,7 +19,7 @@ package org.wso2.carbon.device.mgt.iot.input.adapter.coap;
 
 import org.eclipse.californium.core.CoapServer;
 import org.wso2.carbon.device.mgt.iot.input.adapter.coap.util.COAPEventAdapterConstants;
-import org.wso2.carbon.device.mgt.iot.input.adapter.coap.util.ResourceDirectory;
+import org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.ResourceDirectory;
 import org.wso2.carbon.event.input.adapter.core.*;
 
 import java.util.ArrayList;

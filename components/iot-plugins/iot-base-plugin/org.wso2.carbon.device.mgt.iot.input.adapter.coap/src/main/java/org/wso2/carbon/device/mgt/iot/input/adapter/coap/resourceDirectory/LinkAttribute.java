@@ -14,5 +14,59 @@
  */
 package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory;
 
-public class LinkAttributeAdvanced {
+//attributes of the link format
+
+import java.net.URLDecoder;
+
+public class LinkAttribute {
+
+    private String name;
+    private String value;
+
+    public LinkAttribute() {
+
+    }
+
+    public LinkAttribute(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    public LinkAttribute(String name, int value) {
+        this.name = name;
+        this.value = Integer.valueOf(value).toString();
+    }
+
+    public LinkAttribute(String name) {
+        this.name = name;
+        this.value = "";
+    }
+
+    public static LinkAttribute parse(String str) {
+
+        LinkAttribute attr = new LinkAttribute();
+
+        int seperator = str.indexOf("=");
+        if (seperator > 0)
+            attr.name = URLDecoder.decode(str.substring(0, seperator));
+        if (str.length() > seperator + 1)
+            attr.value = URLDecoder.decode(str.substring(seperator + 1));
+
+        //check value has double qoutes
+
+        return attr;
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public int getIntValue() {
+        return Integer.parseInt(value);
+    }
 }
