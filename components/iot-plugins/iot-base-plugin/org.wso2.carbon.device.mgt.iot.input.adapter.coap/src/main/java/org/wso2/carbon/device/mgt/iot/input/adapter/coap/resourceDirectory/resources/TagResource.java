@@ -15,22 +15,22 @@
 package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory;
 
 import org.eclipse.californium.core.CoapResource;
+import org.eclipse.californium.tools.resources.RDNodeResource;
 
+/*
+ * This Resource is the path resources added to a parent Node Resource
+ *
+ */
+public class TagResource extends CoapResource{
 
-public class RDLookUpTopResource extends CoapResource {
+    private RDNodeResource parentNode;
 
-//	private RDResource rdResource = null;
-
-    public RDLookUpTopResource(RDResource rd){
-        this("rd-lookup", rd);
+    public TagResource(String name, boolean visible, RDNodeResource parentNode) {
+        super(name, visible);
+        this.parentNode = parentNode;
     }
 
-    public RDLookUpTopResource(String resourceIdentifier, RDResource rd) {
-        super(resourceIdentifier);
-//		this.rdResource = rd;
-        getAttributes().addResourceType("core.rd-lookup");
-        add(new RDLookUpDomainResource("d", rd));
-        add(new RDLookUpEPResource("ep", rd));
-        add(new RDLookUpResResource("res", rd));
+    public RDNodeResource getParentNode() {
+        return parentNode;
     }
 }
