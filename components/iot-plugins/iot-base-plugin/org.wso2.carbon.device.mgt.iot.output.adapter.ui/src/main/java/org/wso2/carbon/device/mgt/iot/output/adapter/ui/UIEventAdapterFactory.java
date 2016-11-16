@@ -38,7 +38,7 @@ import java.util.ResourceBundle;
 public class UIEventAdapterFactory extends OutputEventAdapterFactory {
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("org.wso2.carbon.device.mgt.iot.output.adapter.ui.i18n" +
-            ".Resources", Locale.getDefault());
+            ".resources", Locale.getDefault());
 
     public UIEventAdapterFactory() {
     }

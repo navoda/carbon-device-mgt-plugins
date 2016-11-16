@@ -12,7 +12,7 @@
  * CONDITIONS OF ANY KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory;
+package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.resources;
 
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.LinkFormat;
@@ -23,6 +23,10 @@ import org.eclipse.californium.tools.resources.RDNodeResource;
 import org.eclipse.californium.tools.resources.RDResource;
 
 import java.util.List;
+
+/**
+ * modified RD resource
+ */
 
 public class RootResource extends RDResource {
 

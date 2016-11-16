@@ -12,16 +12,41 @@
  * CONDITIONS OF ANY KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.resources.end;
+package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.resources;
 
 import org.eclipse.californium.tools.resources.RDNodeResource;
-import org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.resources.EndResource;
 
 public class DynamicEndResource extends EndResource {
 
+	public final DynamicResource.DataType paramType;
+
 	public DynamicEndResource(String name, boolean visible, RDNodeResource parentNode, String resourceCode) {
-		super(name, visible, parentNode, resourceCode);
+
+		this(name, visible, parentNode, resourceCode,getDataType(name));
 	}
 
+
+	public DynamicEndResource(String name, boolean visible, RDNodeResource parentNode,String resourceCode, DynamicResource.DataType paramType) {
+		super(getResourceName(name), visible, parentNode,resourceCode);
+		this.paramType = paramType;
+	}
+
+	public boolean isParamType(String name) {
+		if (paramType.equals(DynamicResource.DataType.INTEGER)) {
+			if (!name.matches("^-?\\d+$"))
+				return false;
+		}
+
+		return true;
+	}
+
+	public static DynamicResource.DataType getDataType(String queryValue) {
+		return DynamicResource.getDataType(queryValue);
+	}
+
+	public static String getResourceName(String queryValue) {
+
+		return DynamicResource.getResourceName(queryValue);
+	}
 
 }

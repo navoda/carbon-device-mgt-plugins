@@ -1426,5 +1426,12 @@
             <name>GCM Server repository - GitHub</name>
             <url>https://github.com/slorber/gcm-server-repository/raw/master/releases/</url>
         </repository>
+
+
+            <repository>
+                <id>localrepository</id>
+                <url>file://${basedir}/repo</url>
+            </repository>
+
     </repositories>
 </project>

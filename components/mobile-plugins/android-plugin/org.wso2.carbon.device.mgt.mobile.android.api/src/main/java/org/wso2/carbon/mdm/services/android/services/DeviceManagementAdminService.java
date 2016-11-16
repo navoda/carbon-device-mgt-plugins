@@ -480,7 +480,7 @@ public interface DeviceManagementAdminService {
             consumes = MediaType.APPLICATION_JSON,
             httpMethod = "POST",
             value = "Factory Resetting an Android Device",
-            notes = "Factory rest or erases all the data stored in the Android devices " +
+            notes = "Factory end or erases all the data stored in the Android devices " +
                     "to restore them back to the original system",
             response = Activity.class,
             tags = "Android Device Management Administrative Service"

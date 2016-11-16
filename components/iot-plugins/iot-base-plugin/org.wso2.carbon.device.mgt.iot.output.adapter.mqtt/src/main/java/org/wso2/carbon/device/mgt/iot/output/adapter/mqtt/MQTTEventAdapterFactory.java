@@ -27,7 +27,7 @@ import java.util.*;
  */
 public class MQTTEventAdapterFactory extends OutputEventAdapterFactory {
     private ResourceBundle resourceBundle =
-            ResourceBundle.getBundle("org.wso2.carbon.device.mgt.iot.output.adapter.mqtt.i18n.Resources", Locale.getDefault());
+            ResourceBundle.getBundle("org.wso2.carbon.device.mgt.iot.output.adapter.mqtt.i18n.resources", Locale.getDefault());
 
     @Override
     public String getType() {

@@ -19,7 +19,11 @@ package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory;
 
 import org.eclipse.californium.core.CoapServer;
 import org.eclipse.californium.core.network.config.NetworkConfig;
-
+import org.eclipse.californium.tools.resources.RDLookUpTopResource;
+import org.eclipse.californium.tools.resources.RDResource;
+import org.eclipse.californium.tools.resources.RDTagTopResource;
+import org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.resources.DynamicMessageDeliverer;
+import org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.resources.RootResource;
 
 public class ResourceDirectory extends CoapServer {
 
@@ -41,10 +45,15 @@ public class ResourceDirectory extends CoapServer {
     }
 
     public void init() {
-        //directory adds ResourceDiirectory resource and the ResourseDirectoryLookup resource
-        rdResource = new RDResource();
+
+    	//the messages with dynamic resources are delivered by DynamicMessageDeliverer
+        this.setMessageDeliverer(new DynamicMessageDeliverer(this.getRoot()));
+
+        //directory adds ResourceDiirectory resource, ResourseDirectoryLookup resource and Tag resource
+        rdResource = new RootResource();
         this.add(rdResource);
         this.add(new RDLookUpTopResource(rdResource));
+        this.add(new RDTagTopResource(rdResource));
 
     }
 

@@ -12,20 +12,24 @@
  * CONDITIONS OF ANY KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory;
+package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.resources;
 
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.LinkFormat;
+import org.eclipse.californium.core.server.resources.Resource;
 import org.eclipse.californium.core.server.resources.ResourceAttributes;
 import org.eclipse.californium.tools.resources.RDNodeResource;
-import org.eclipse.californium.tools.resources.RDTagResource;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Scanner;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
+/**
+ * Endpoint resource which directly links to RD (Resource Directory)
+ */
 
 public class NodeResource extends RDNodeResource {
 
@@ -34,58 +38,92 @@ public class NodeResource extends RDNodeResource {
     //parameter constants
     public static final String URI_TEMPLATE = "ut";
 
-    //interface discription constants
-    public static final String GET_RESOURCE = "GET";
-    public static final String POST_RESOURCE = "POST";
-    public static final String PUT_RESOURCE = "PUT";
-    public static final String DELETE_RESOURCE = "DELETE";
+	//dynamic patterns
+	public Pattern dynamicResourcePattern= Pattern.compile("\\{(\\w+;?\\w+)\\}");
 
     //http client for each endpoint
     public static final HttpClient HTTP_CLIENT= HttpClientBuilder.create().build();
 
-    //FIXME- a hard coded temparary access token
-    public String accessToken=null;
-
-    public Set<String> URITemplates;
-
-
     public NodeResource(String ep, String domain) {
         super(ep, domain);
-        URITemplates = new LinkedHashSet<>();
-    }
+	}
 
 
     @Override
-    public CoapResource addEndResource(String name, ResourceAttributes attributes) {
+    public CoapResource addResource(String path, ResourceAttributes attributes) {
+        Scanner scanner = new Scanner(path);
+        scanner.useDelimiter("/");
+        String next = "";
+        boolean resourceExist = false;
+		boolean dynamicPath = false; //define if the current path contains dynamic parent (hence dynamic resources)
+        Resource resource = this; // It's the resource that represents the endpoint
 
-        CoapResource endResource;
-        if (attributes.containsAttribute(LinkFormat.INTERFACE_DESCRIPTION)) {
-            switch (attributes.getAttributeValues(LinkFormat.INTERFACE_DESCRIPTION).get(0)) {
-
-                case POST_RESOURCE:
-                    endResource = new POSTResource(name, true, this);
-                    break;
-                case PUT_RESOURCE:
-                    endResource = new PUTResource(name, true, this);
-                    break;
-                case DELETE_RESOURCE:
-                    endResource = new DELETEResource(name, true, this);
-                    break;
-                case GET_RESOURCE:
-                    endResource = new GETResource(name, true, this);
-                    break;
-                default:
-                    endResource = new RDTagResource(name, true, this);
-
+        CoapResource subResource = null;
+        while (scanner.hasNext()) {
+            resourceExist = false;
+            next = scanner.next();
+            for (Resource res : resource.getChildren()) {
+                if (res.getName().equals(next)) {
+                    subResource = (CoapResource) res;
+                    resourceExist = true;
+					if(subResource instanceof DynamicParentResource)
+						dynamicPath=true;
+                }
             }
-        } else {
-            endResource = new RDTagResource(name, true, this);
-        }
+            if (!resourceExist) {
 
-        return endResource;
+				if(next.matches(dynamicResourcePattern.pattern())) //if the resource is dynamic
+				{
+					//FIXME - end resource must be changed into a tag resource when adding a child resoruce under it
+					if(!dynamicPath) //if the new subResource has no dynamic parent in it's path
+					{
+						resource= new DynamicParentResource((TagResource) resource);
+					}
+
+					if (scanner.hasNext())//if the resource is not the end resource
+						subResource = new DynamicResource(next, true, this);
+					else
+						subResource = addEndResource(next,attributes,true);
+
+				}
+            	else
+				{
+					if (scanner.hasNext())//if the resource is not the end resource
+						subResource = new TagResource(next, true, this);
+					else
+						subResource = addEndResource(next, attributes,false);
+				}
+
+                resource.add(subResource);
+            }
+            resource = subResource;
+        }
+        subResource.setPath(resource.getPath());
+        subResource.setName(next);
+        scanner.close();
+        return subResource;
     }
 
+	/**
+	 * @param name
+	 * @param attributes
+	 * @param isDynamic check if the resource is a dynamic resource or not
+	 * @return
+	 */
+    public CoapResource addEndResource(String name, ResourceAttributes attributes,boolean isDynamic) {
 
+    	CoapResource endResource;
+		String resourceCode =null;
+
+        if (attributes.containsAttribute(LinkFormat.INTERFACE_DESCRIPTION))
+            resourceCode=attributes.getAttributeValues(LinkFormat.INTERFACE_DESCRIPTION).get(0);
+
+		if(isDynamic)
+			endResource = new DynamicEndResource(name, true, this, resourceCode);
+		else
+			endResource = new EndResource(name, true, this, resourceCode);
+		return endResource;
+    }
 
 
 

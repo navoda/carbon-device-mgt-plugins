@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 public class XMPPEventAdapterFactory extends InputEventAdapterFactory {
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle
-            ("org.wso2.carbon.device.mgt.iot.input.adapter.xmpp.i18n.Resources", Locale.getDefault());
+            ("org.wso2.carbon.device.mgt.iot.input.adapter.xmpp.i18n.resources", Locale.getDefault());
 
     @Override
     public String getType() {

@@ -12,15 +12,15 @@
  * CONDITIONS OF ANY KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory;
+package org.wso2.carbon.device.mgt.iot.input.adapter.coap.resourceDirectory.resources;
 
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.tools.resources.RDNodeResource;
 
-/*
- * This Resource is the path resources added to a parent Node Resource
- *
+/**
+ * This Resource is the path resources added to a parent NodeResource
  */
+
 public class TagResource extends CoapResource{
 
     private RDNodeResource parentNode;
@@ -33,4 +33,7 @@ public class TagResource extends CoapResource{
     public RDNodeResource getParentNode() {
         return parentNode;
     }
+
+
+
 }
